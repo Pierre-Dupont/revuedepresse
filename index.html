@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+	</head>
+	<style>
+	html{
+	background: #DDD;
+font-family: "Open Sans";
+	}
+	header{
+background-color: #0071C1;
+width: 100%;
+position: fixed;
+top: 0px;
+left: 0px;
+text-align: center;
+padding-bottom: 15px;
+height: 60px;
+z-index: 2;
+box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.26);
+overflow: auto;
+	}
+	header > h1 {
+		color:white;
+	}
+	article{
+		background-color: #EEE;
+border-radius: 5px;
+margin: 20px;
+padding-right: 10px;
+padding-left: 10px;
+box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.26);
+		padding:10px;
+	}
+	a {
+	color: inherit;
+text-decoration: none;
+	}
+	a:hover{
+	color:purple;
+	}
+	#articles{
+		position: absolute;
+top: 80px;
+left: 0px;
+width: 100%;
+	}
+	.logo{
+		width:50px;
+		border-radius:25px;
+	}
+	</style>
+
+	<body onload="test()">
+	<header>
+	<h1>La revue de presse de Pierre Dupont</h1>
+	</header>
+	<main id="articles">
+	</main>
+	<script>
+	function test(){	
+	var x = new XMLHttpRequest();
+	x.open("GET", "http://www.lemonde.fr/rss/une.xml", true);
+	x.onreadystatechange = function () {
+  	if (x.readyState == 4 && x.status == 200)
+  	{
+    	var doc = x.responseXML;
+var title = doc.getElementsByTagName("channel")[0].getElementsByTagName("title")[0].firstChild.nodeValue;
+	var tab = doc.getElementsByTagName("channel")[0].getElementsByTagName("item");
+	for (var i = 0; i < tab.length; i++) {
+    		var titre = tab[i].getElementsByTagName("title")[0].textContent
+    		var lien = tab[i].getElementsByTagName("link")[0].textContent
+    		var description = tab[i].getElementsByTagName("description")[0].textContent
+    		var image = tab[i].getElementsByTagName("enclosure")[0].getAttribute('url');
+		var articles = document.getElementById("articles");
+		articles.innerHTML=articles.innerHTML+"<article><h3><img class='logo' src='"+image+"'/> <a href='"+lien+"'>"+titre+"</a></h3><p>"+description+"</article>";
+		console.log(tab[i]);
+	}
+  	}
+	};
+	x.send(null);
+	}
+	</script>
+	</body>
+</html>
